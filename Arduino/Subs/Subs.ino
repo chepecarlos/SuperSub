@@ -4,6 +4,9 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 }
 
 #include <Ticker.h>
+#include <ESPmDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
 
