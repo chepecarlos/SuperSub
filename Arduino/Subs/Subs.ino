@@ -9,6 +9,8 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 #include <ArduinoOTA.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
+#include <TelnetStream.h>
+
 
 #include "data.h"
 
@@ -31,14 +33,14 @@ void funcionLed() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Large Digit Driver Example");
+  Serial.println("iniciando sistema de SuperSub");
   pinMode(ledEstado, OUTPUT);
   digitalWrite(ledEstado, LOW);
   actualizarEstado();
 
-  //Activando codig a cargarse en procesador 0
+  //Activando codigo a cargarse en procesador 0
   //Procesador 1 Exclusico para Wifi
-  //Procesador 0 Actualizar pantalla y Botones
+  //Procesador 0 Actualizar pantalla
   xTaskCreatePinnedToCore(
     MultiCore,   /* Nombre de la funcion */
     "MultiCore", /* Nombre del proceso  */
@@ -49,16 +51,13 @@ void setup() {
     0);  /* Procesador a poner la operacion */
   delay(100);
 
-  ConectarWifi();
+  conectarWifi();
 }
-
 
 void loop() {
   actualizarEstado();
   WifiActiva();
-
 }
-
 
 void actualizarEstado() {
   if (estado != estadoAnterior) {

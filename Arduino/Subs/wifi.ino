@@ -1,4 +1,5 @@
-void ConectarWifi() {
+
+void conectarWifi() {
 
   wifiMulti.addAP(ssid_1, password_1);
   wifiMulti.addAP(ssid_2, password_2);
@@ -16,7 +17,7 @@ void ConectarWifi() {
 }
 
 void configurarOTA() {
-  ArduinoOTA.setHostname("SuperSub");
+  ArduinoOTA.setHostname(nombre);
 
   ArduinoOTA.onStart([]() {
     String type;
@@ -49,7 +50,10 @@ void configurarOTA() {
     }
   });
 
+  MDNS.begin(nombre);
+
   ArduinoOTA.begin();
+  TelnetStream.begin();
 }
 
 void WifiActiva() {

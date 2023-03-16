@@ -15,7 +15,7 @@ void MultiCore( void * pvParameters ) {
     numero++;
     numero %= 100000;
 
-    Serial.println(numero);
-    delay(250);
+    TelnetStream.println(numero);
+    delay(500);
   }
 }
