@@ -8,6 +8,7 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include <WiFi.h>
+#include <MQTT.h>
 #include <WiFiMulti.h>
 #include <TelnetStream.h>
 
@@ -56,7 +57,7 @@ void setup() {
 
 void loop() {
   actualizarEstado();
-  WifiActiva();
+  actualizarWifi();
 }
 
 void actualizarEstado() {

@@ -1,21 +1,4 @@
 
-void conectarWifi() {
-
-  wifiMulti.addAP(ssid_1, password_1);
-  wifiMulti.addAP(ssid_2, password_2);
-
-  Serial.println("Conectando con Wifi...");
-  if (wifiMulti.run() == WL_CONNECTED) {
-    Serial.println("");
-    Serial.println("WiFi Conectado");
-    Serial.println("Mi IP es: ");
-    Serial.println(WiFi.localIP());
-    estado = noMQTT;
-  }
-
-  configurarOTA();
-}
-
 void configurarOTA() {
   ArduinoOTA.setHostname(nombre);
 
@@ -50,22 +33,7 @@ void configurarOTA() {
     }
   });
 
-  MDNS.begin(nombre);
+  
 
   ArduinoOTA.begin();
-  TelnetStream.begin();
-}
-
-void WifiActiva() {
-  if (wifiMulti.run() != WL_CONNECTED) {
-    Serial.println("Wifi No Conectada!");
-    delay(1000);
-    estado = noWifi;
-    return;
-  } else {
-    estado = noMQTT;
-
-  }
-
-  ArduinoOTA.handle();
 }
