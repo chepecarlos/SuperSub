@@ -28,23 +28,37 @@ void actualizarWifi() {
     delay(500);
     estado = noWifi;
     return;
-  } else {
-    estado = noMQTT;
-  }
+  } 
 
   ArduinoOTA.handle();
-  client.loop();
-  delay(10);
+  
+  actualizarMQTT();
 
-  if (!client.connected()) {
-    Serial.println("MQTT - No Conectada!");
-    if (!client.connect(nombre)) {
-      delay(500);
-      return;
+}
+
+void LeerTelnet() {
+  if (TelnetStream.available()) {
+    char Letra = TelnetStream.read();
+    switch (Letra) {
+      case 'e':
+      case 'E':
+        TelnetStream.print("Estado del sistema: ");
+        switch (estado) {
+          case noWifi:
+            TelnetStream.print("No Wifi, como viste este mensaje??");
+            break;
+          case noMQTT:
+            TelnetStream.print("Si Wifi, falta MQTT");
+            break;
+          case conectado:
+            TelnetStream.print("Todo conectado");
+            break;
+          default:
+            TelnetStream.print("Que paso aqui??");
+            break;
+        }
+        TelnetStream.println();
+        break;
     }
-    client.subscribe("/sub");
-    Serial.println("MQTT - Conectada!");
   }
-
-
 }

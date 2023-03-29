@@ -12,7 +12,6 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 #include <WiFiMulti.h>
 #include <TelnetStream.h>
 
-
 #include "data.h"
 
 WiFiMulti wifiMulti;
@@ -27,6 +26,10 @@ boolean EstadoLed = false;
 int estado = noWifi;
 int estadoAnterior = -1;
 
+int PinRele = 18;
+
+float SubReal = -1;
+
 void funcionLed() {
   EstadoLed = !EstadoLed;
   digitalWrite(ledEstado, EstadoLed ? HIGH : LOW);
@@ -37,6 +40,8 @@ void setup() {
   Serial.println("iniciando sistema de SuperSub");
   pinMode(ledEstado, OUTPUT);
   digitalWrite(ledEstado, LOW);
+  pinMode(PinRele, OUTPUT);
+  digitalWrite(PinRele, HIGH);
   actualizarEstado();
 
   //Activando codigo a cargarse en procesador 0
@@ -58,6 +63,7 @@ void setup() {
 void loop() {
   actualizarEstado();
   actualizarWifi();
+  LeerTelnet();
 }
 
 void actualizarEstado() {
