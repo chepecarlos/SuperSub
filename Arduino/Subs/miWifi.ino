@@ -28,10 +28,10 @@ void actualizarWifi() {
     delay(500);
     estado = noWifi;
     return;
-  } 
+  }
 
   ArduinoOTA.handle();
-  
+
   actualizarMQTT();
 
 }
@@ -58,6 +58,8 @@ void LeerTelnet() {
             break;
         }
         TelnetStream.println();
+        TelnetStream.print("SubReal: ");
+        TelnetStream.println(SubReal);
         break;
     }
   }

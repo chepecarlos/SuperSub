@@ -9,6 +9,7 @@ void ConfigurarMQTT() {
 void mensajeMQTT(String &topic, String &payload) {
   Serial.println("Mensaje: " + topic + " - " + payload);
   TelnetStream.println("Mensaje: " + topic + " - " + payload);
+  SubReal = payload.toFloat();
 }
 
 void actualizarMQTT() {
@@ -27,5 +28,5 @@ void actualizarMQTT() {
     clientMQTT.subscribe("alsw/subreal");
     Serial.println("MQTT - Conectada!");
     TelnetStream.println("MQTT - Conectada!");
-  }s
+  } 
 }

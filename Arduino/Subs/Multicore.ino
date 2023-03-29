@@ -11,11 +11,15 @@ void MultiCore( void * pvParameters ) {
 
   while (true) {
 
-    mostarNumeros(numero);
-    numero++;
-    numero %= 100000;
-
-    TelnetStream.println(numero);
+    if (SubReal >= 0) {
+      mostarNumeros(SubReal);
+      TelnetStream.println(SubReal);
+    } else {
+      mostarNumeros(numero);
+      numero++;
+      numero %= 100000;
+      TelnetStream.println(numero);
+    }
     delay(500);
   }
 }
