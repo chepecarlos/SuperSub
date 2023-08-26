@@ -5,12 +5,13 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 
 #include <Ticker.h>
 #include <ESPmDNS.h>
-#include <WiFiUdp.h>
+//#include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include <WiFi.h>
 #include <MQTT.h>
 #include <WiFiMulti.h>
 #include <TelnetStream.h>
+#include "RTClib.h"
 
 #include "data.h"
 
@@ -21,28 +22,20 @@ Ticker cambiarLed;
 #define noMQTT 1
 #define conectado 2
 
-int ledEstado = 2;
+int pinLedEstado = 4;
 boolean EstadoLed = false;
 int estado = noWifi;
 int estadoAnterior = -1;
 
-int PinRele = 18;
-
 float SubReal = -1;
 
-void funcionLed() {
-  EstadoLed = !EstadoLed;
-  digitalWrite(ledEstado, EstadoLed ? HIGH : LOW);
-}
-
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("iniciando sistema de SuperSub");
-  pinMode(ledEstado, OUTPUT);
-  digitalWrite(ledEstado, LOW);
-  pinMode(PinRele, OUTPUT);
-  digitalWrite(PinRele, HIGH);
-  actualizarEstado();
+
+  pinMode(pinLedEstado, OUTPUT);
+  digitalWrite(pinLedEstado, LOW);
+  actualizarLed();
 
   //Activando codigo a cargarse en procesador 0
   //Procesador 1 Exclusico para Wifi
@@ -58,28 +51,11 @@ void setup() {
   delay(100);
 
   conectarWifi();
+  iniciarReloc();
 }
 
 void loop() {
-  actualizarEstado();
+  actualizarLed();
   actualizarWifi();
   LeerTelnet();
-}
-
-void actualizarEstado() {
-  if (estado != estadoAnterior) {
-    estadoAnterior = estado;
-
-    switch (estado) {
-      case noWifi:
-        cambiarLed.attach(0.1, funcionLed);
-        break;
-      case noMQTT:
-        cambiarLed.attach(1, funcionLed);
-        break;
-      case conectado:
-        cambiarLed.attach(2, funcionLed);
-        break;
-    }
-  }
 }

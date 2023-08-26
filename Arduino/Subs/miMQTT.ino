@@ -17,16 +17,16 @@ void actualizarMQTT() {
   delay(10);
 
   if (!clientMQTT.connected()) {
-    Serial.println("MQTT - No Conectada!");
     if (!clientMQTT.connect(nombre)) {
       delay(500);
-      estado = noMQTT;
+      Serial.println("MQTT - No Conectada!");
       return;
     }
+    estado = noMQTT;
   } else if (estado == noMQTT) {
     estado = conectado;
     clientMQTT.subscribe("alsw/subreal");
     Serial.println("MQTT - Conectada!");
     TelnetStream.println("MQTT - Conectada!");
-  } 
+  }
 }

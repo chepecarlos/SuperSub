@@ -13,12 +13,14 @@ void MultiCore( void * pvParameters ) {
 
     if (SubReal >= 0) {
       mostarNumeros(SubReal);
+      Serial.println(SubReal);
       TelnetStream.println(SubReal);
     } else {
       mostarNumeros(numero);
       numero++;
       numero %= 100000;
       TelnetStream.println(numero);
+      Serial.println(numero);
     }
     delay(500);
   }

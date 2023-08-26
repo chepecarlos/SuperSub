@@ -1,6 +1,6 @@
 
-byte const segmentClock = 17;
-byte const segmentLatch = 16; //
+byte const segmentClock = 17; // CLK
+byte const segmentLatch = 16; // LAT
 byte const segmentData = 5; // SER
 
 byte const cantidadDigitos = 5;
@@ -74,6 +74,7 @@ void enviarNumero(byte numero, boolean decimal) {
   for (byte x = 0 ; x < 8 ; x++)  {
     digitalWrite(segmentClock, LOW);
     digitalWrite(segmentData, segmentos & 1 << (7 - x));
+    delay(1);
     digitalWrite(segmentClock, HIGH);
   }
 }
