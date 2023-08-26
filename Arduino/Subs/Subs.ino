@@ -28,6 +28,7 @@ int estado = noWifi;
 int estadoAnterior = -1;
 
 float SubReal = -1;
+float SubRealAnterior = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -58,4 +59,37 @@ void loop() {
   actualizarLed();
   actualizarWifi();
   LeerTelnet();
+  actualizarSerial();
+}
+
+void actualizarSerial() {
+  while (Serial.available()) {
+    estadoSerial(Serial);
+  }
+}
+
+void estadoSerial(Stream & miSerial) {
+  char Letra = miSerial.read();
+  switch (Letra) {
+    case 'e':
+    case 'E':
+      miSerial.print("Estado del sistema: ");
+      switch (estado) {
+        case noWifi:
+          miSerial.print("No Wifi, como viste este mensaje??");
+          break;
+        case noMQTT:
+          miSerial.print("Si Wifi, falta MQTT");
+          break;
+        case conectado:
+          miSerial.print("Todo conectado");
+          break;
+        default:
+          miSerial.print("Que paso aqui??");
+          break;
+      }
+      miSerial.println();
+      miSerial << "SubReal: " << SubReal << "\n";
+      break;
+  }
 }

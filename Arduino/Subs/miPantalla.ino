@@ -52,8 +52,7 @@ void enviarNumero(byte numero, boolean decimal) {
 
   byte segmentos;
 
-  switch (numero)
-  {
+  switch (numero)  {
     case 1: segmentos = b | c; break;
     case 2: segmentos = a | b | d | e | g; break;
     case 3: segmentos = a | b | c | d | g; break;

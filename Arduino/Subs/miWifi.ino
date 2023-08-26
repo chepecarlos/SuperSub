@@ -37,30 +37,7 @@ void actualizarWifi() {
 }
 
 void LeerTelnet() {
-  if (TelnetStream.available()) {
-    char Letra = TelnetStream.read();
-    switch (Letra) {
-      case 'e':
-      case 'E':
-        TelnetStream.print("Estado del sistema: ");
-        switch (estado) {
-          case noWifi:
-            TelnetStream.print("No Wifi, como viste este mensaje??");
-            break;
-          case noMQTT:
-            TelnetStream.print("Si Wifi, falta MQTT");
-            break;
-          case conectado:
-            TelnetStream.print("Todo conectado");
-            break;
-          default:
-            TelnetStream.print("Que paso aqui??");
-            break;
-        }
-        TelnetStream.println();
-        TelnetStream.print("SubReal: ");
-        TelnetStream.println(SubReal);
-        break;
-    }
+  while (TelnetStream.available()) {
+    estadoSerial(TelnetStream);
   }
 }
