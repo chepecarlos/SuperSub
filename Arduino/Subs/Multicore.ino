@@ -8,8 +8,13 @@ void MultiCore( void * pvParameters ) {
   InicializarPantallas();
   mostarNumeros(99999);
   delay(500);
-  SubReal = leerArchivo().toInt();
+  mostarNumeros(12345);
+  delay(500);
+  SubReal = leerSub().toInt();
   Serial << "Cargando Sub: " << SubReal << "\n";
+  pantallaActiva = leerPantalla();
+  Serial << "Cargando pantalla Activa: " << (pantallaActiva ? "Activa" : "Desactiva") << "\n";
+
   while (true) {
     if (pantallaActiva) {
       if (SubReal >= 0) {
@@ -18,7 +23,7 @@ void MultiCore( void * pvParameters ) {
           mostarNumeros(SubReal);
           Serial << "Actualizando pantalla " << SubReal << "\n";
           TelnetStream << "Actualizando pantalla " << SubReal << "\n";
-          escrivirArchivo(SubReal);
+          escrivirSub(SubReal);
         } else if (pantallaActiva != pantallaActivaAnterior ) {
           pantallaActivaAnterior = pantallaActiva;
           Serial << "Redibujar\n";

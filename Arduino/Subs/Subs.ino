@@ -97,7 +97,7 @@ void estadoSerial(Stream & miSerial) {
       }
       miSerial.println();
       miSerial << "SubReal: " << SubReal << "\n";
-      miSerial << "SubGuardado" << leerArchivo() << "\n";
+      miSerial << "SubGuardado" << leerSub() << "\n";
       break;
     case 'r':
     case 'R':

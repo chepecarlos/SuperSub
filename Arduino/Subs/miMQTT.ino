@@ -28,6 +28,7 @@ void mensajeMQTTLocal(String &topic, String &payload) {
   }
   else if (topic.endsWith("activo")) {
     pantallaActiva = !pantallaActiva;
+    escrivirPantalla(pantallaActiva);
     Serial << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
     TelnetStream << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
   }
