@@ -16,6 +16,34 @@ void InicializarPantallas() {
   digitalWrite(segmentLatch, LOW);
 }
 
+void mostarHora(int hora, int minuto, boolean pm) {
+  for (byte x = 0 ; x < 2 ; x++)  {
+    int resto = minuto % 10;
+    if (minuto == 0) {
+      enviarNumero(' ', false);
+    } else {
+      enviarNumero(resto, false);
+    }
+    minuto /= 10;
+  }
+
+  enviarNumero('-', false);
+
+  for (byte x = 0 ; x < 2 ; x++)  {
+    int resto = hora % 10;
+    if (hora == 0) {
+      enviarNumero(' ', false);
+    } else {
+      enviarNumero(resto, false);
+    }
+    hora /= 10;
+  }
+
+  digitalWrite(segmentLatch, LOW);
+  digitalWrite(segmentLatch, HIGH);
+
+}
+
 void mostarNumeros(float valor) {
   int numero = abs(valor);
 
