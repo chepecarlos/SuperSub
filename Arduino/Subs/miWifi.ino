@@ -11,6 +11,7 @@ void conectarWifi() {
     Serial.println("Mi IP es: ");
     Serial.println(WiFi.localIP());
     estado = noMQTT;
+    estadoLocal = noMQTT;
   }
 
   MDNS.begin(nombre);
@@ -27,6 +28,7 @@ void actualizarWifi() {
     Serial.println("Wifi No Conectada!");
     delay(500);
     estado = noWifi;
+    estadoLocal = noWifi;
     return;
   }
 

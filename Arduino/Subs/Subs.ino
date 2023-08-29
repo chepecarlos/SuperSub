@@ -24,11 +24,18 @@ Ticker cambiarLed;
 
 int pinLedEstado = 4;
 boolean EstadoLed = false;
+
 int estado = noWifi;
 int estadoAnterior = -1;
 
+int estadoLocal = noWifi;
+int estadoAnteriorLocal = -1;
+
 float SubReal = -1;
 float SubRealAnterior = 0;
+
+boolean pantallaActiva = true;
+boolean pantallaActivaAnterior = false;
 
 void setup() {
   Serial.begin(115200);
@@ -90,6 +97,11 @@ void estadoSerial(Stream & miSerial) {
       }
       miSerial.println();
       miSerial << "SubReal: " << SubReal << "\n";
+      miSerial << "SubGuardado" << leerArchivo() << "\n";
+      break;
+    case 'r':
+    case 'R':
+      formatiarMemoria(miSerial);
       break;
   }
 }
