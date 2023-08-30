@@ -12,6 +12,7 @@ void MultiCore( void * pvParameters ) {
   Serial.println("Procesos en Procesador 0 Iniciados");
   InicializarPantallas();
   iniciarSistema();
+  configurarCambioPantalla();
   while (true) {
     if (pantallaActiva) {
       switch (estadoPantalla) {
@@ -37,6 +38,16 @@ void MultiCore( void * pvParameters ) {
   }
 }
 
+void funcionCambioPantalla() {
+  estadoPantalla++;
+  if (estadoPantalla > temperatura) {
+    estadoPantalla = suscriptor;
+  }
+}
+
+void configurarCambioPantalla() {
+  cambiarPantalla.attach(2, funcionCambioPantalla);
+}
 
 void dibujarSub() {
   if (SubReal >= 0) {

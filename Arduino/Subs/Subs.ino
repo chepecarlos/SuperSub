@@ -16,7 +16,9 @@ template<class T> inline Print &operator <<(Print &obj, T arg) {
 #include "data.h"
 
 WiFiMulti wifiMulti;
+
 Ticker cambiarLed;
+Ticker cambiarPantalla;
 
 #define noWifi 0
 #define noMQTT 1
@@ -57,9 +59,9 @@ void setup() {
     NULL,       /* Manejo del proceso  */
     0);  /* Procesador a poner la operacion */
   delay(100);
-
-  conectarWifi();
   iniciarReloc();
+  conectarWifi();
+
 }
 
 void loop() {
