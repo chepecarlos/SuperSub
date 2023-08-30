@@ -1,13 +1,16 @@
 
 RTC_DS3231 rtc;
 boolean estadoReloc = false;
+DateTime fechaActual;
 
 void iniciarReloc() {
   if (!rtc.begin()) {
     Serial.println("No encontrado RTC");
     Serial.flush();
+    estadoReloc = false;
     return;
   }
+  Serial.println("RTC encontrado");
   estadoReloc = true;
 }
 
@@ -16,18 +19,21 @@ float temperaturaActual() {
 }
 
 boolean relocActivo() {
-  return true;
   return estadoReloc;
 }
 
+void actualizarFecha() {
+  fechaActual =  rtc.now();
+}
+
 int horaActual() {
-  return 11;
+  return fechaActual.twelveHour();
 }
 
 int minutoActual() {
-  return 59 ;
+  return fechaActual.minute();
 }
 
 boolean esPM() {
-  return true;
+  return fechaActual.isPM();
 }

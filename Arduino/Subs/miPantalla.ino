@@ -6,7 +6,6 @@ byte const segmentData = 5; // SER
 byte const cantidadDigitos = 5;
 
 void InicializarPantallas() {
-
   pinMode(segmentClock, OUTPUT);
   pinMode(segmentData, OUTPUT);
   pinMode(segmentLatch, OUTPUT);
@@ -19,8 +18,8 @@ void InicializarPantallas() {
 void mostarHora(int hora, int minuto, boolean pm) {
   for (byte x = 0 ; x < 2 ; x++)  {
     int resto = minuto % 10;
-    if (minuto == 0) {
-      enviarNumero(' ', false);
+    if (x == 0) {
+      enviarNumero(resto, pm);
     } else {
       enviarNumero(resto, false);
     }
@@ -41,7 +40,27 @@ void mostarHora(int hora, int minuto, boolean pm) {
 
   digitalWrite(segmentLatch, LOW);
   digitalWrite(segmentLatch, HIGH);
+}
 
+void mostarTemperatura(float valor) {
+  int numero = abs(valor);
+
+  enviarNumero('C', false);
+  enviarNumero('o', false);
+  enviarNumero(' ', false);
+
+  for (byte x = 0 ; x < 2 ; x++)  {
+    int resto = numero % 10;
+    if (numero == 0) {
+      enviarNumero(' ', false);
+    } else {
+      enviarNumero(resto, false);
+      numero /= 10;
+    }
+  }
+
+  digitalWrite(segmentLatch, LOW);
+  digitalWrite(segmentLatch, HIGH);
 }
 
 void mostarNumeros(float valor) {
@@ -92,8 +111,10 @@ void enviarNumero(byte numero, boolean decimal) {
     case 9: segmentos = a | b | c | d | f | g; break;
     case 0: segmentos = a | b | c | d | e | f; break;
     case ' ': segmentos = 0; break;
-    case 'c': segmentos = g | e | d; break;
+    case 'c': segmentos = a | f | g; break;
+    case 'C': segmentos = a | d  | e | f; break;
     case '-': segmentos = g; break;
+    case 'o': segmentos = a | b | f | g; break;
   }
 
   if (decimal) segmentos |= dp;

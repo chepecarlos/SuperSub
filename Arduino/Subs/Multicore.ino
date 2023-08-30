@@ -3,7 +3,7 @@
 #define tiempo 1
 #define temperatura 2
 
-int estadoPantalla = tiempo;
+int estadoPantalla = temperatura;
 
 int numero = 0;
 
@@ -20,6 +20,9 @@ void MultiCore( void * pvParameters ) {
           break;
         case tiempo:
           dibujarTiempo();
+          break;
+        case temperatura:
+          dibujarTemperatura();
           break;
         default:
           numero = suscriptor;
@@ -54,6 +57,7 @@ void dibujarSub() {
 
 void dibujarTiempo() {
   if (relocActivo()) {
+    actualizarFecha();
     int hora = horaActual() ;
     int minuto = minutoActual();
     boolean pm = esPM();
@@ -62,7 +66,16 @@ void dibujarTiempo() {
   } else {
     Serial << "Error con la hora\n";
   }
+}
 
+void dibujarTemperatura() {
+  if (relocActivo()) {
+    float temperaturaInterna = temperaturaActual();
+    Serial << "Temeratura Actual: " << temperaturaInterna << "\n";
+    mostarTemperatura(temperaturaInterna);
+  } else {
+    Serial << "Error con la Tempetura\n";
+  }
 }
 
 void dibujarDefault() {
