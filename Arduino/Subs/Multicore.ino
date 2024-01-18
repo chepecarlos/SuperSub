@@ -6,15 +6,16 @@
 int estadoPantalla = temperatura;
 
 int numero = 0;
+int cambioPantalla = 4;
 
-void MultiCore( void * pvParameters ) {
+void MultiCore(void* pvParameters) {
 
   Serial.println("Procesos en Procesador 0 Iniciados");
   InicializarPantallas();
   iniciarSistema();
   configurarCambioPantalla();
   while (true) {
-    if (pantallaActiva) {
+    if (pantallaActiva || ConectadoPC) {
       switch (estadoPantalla) {
         case suscriptor:
           dibujarSub();
@@ -46,7 +47,7 @@ void funcionCambioPantalla() {
 }
 
 void configurarCambioPantalla() {
-  cambiarPantalla.attach(2, funcionCambioPantalla);
+  cambiarPantalla.attach(cambioPantalla, funcionCambioPantalla);
 }
 
 void dibujarSub() {
@@ -57,10 +58,11 @@ void dibujarSub() {
       Serial << "Actualizando pantalla " << SubReal << "\n";
       TelnetStream << "Actualizando pantalla " << SubReal << "\n";
       escrivirSub(SubReal);
-    } else if (pantallaActiva != pantallaActivaAnterior ) {
+    } else  // if (pantallaActiva != pantallaActivaAnterior ) {
+    {
       pantallaActivaAnterior = pantallaActiva;
-      Serial << "Redibujar\n";
-      TelnetStream << "Redibujar\n";
+      // Serial << "Redibujar\n";
+      // TelnetStream << "Redibujar\n";
       mostarNumeros(SubReal);
     }
   }
@@ -69,7 +71,7 @@ void dibujarSub() {
 void dibujarTiempo() {
   if (relocActivo()) {
     actualizarFecha();
-    int hora = horaActual() ;
+    int hora = horaActual();
     int minuto = minutoActual();
     boolean pm = esPM();
     Serial << "Hora: " << hora << ":" << minuto << " " << (pm ? "PM" : "AM") << "\n";

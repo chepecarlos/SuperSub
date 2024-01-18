@@ -1,4 +1,4 @@
-template<class T> inline Print &operator <<(Print &obj, T arg) {
+template<class T> inline Print &operator<<(Print &obj, T arg) {
   obj.print(arg);
   return obj;
 }
@@ -39,6 +39,8 @@ float SubRealAnterior = 0;
 boolean pantallaActiva = true;
 boolean pantallaActivaAnterior = false;
 
+boolean ConectadoPC = false;
+
 void setup() {
   Serial.begin(115200);
   Serial.println("iniciando sistema de SuperSub");
@@ -53,15 +55,14 @@ void setup() {
   xTaskCreatePinnedToCore(
     MultiCore,   /* Nombre de la funcion */
     "MultiCore", /* Nombre del proceso  */
-    10000,      /* Tamano de palabra */
-    NULL,       /* parametros de entrada */
-    0,          /* Prioridas del proceso */
-    NULL,       /* Manejo del proceso  */
-    0);  /* Procesador a poner la operacion */
+    10000,       /* Tamano de palabra */
+    NULL,        /* parametros de entrada */
+    0,           /* Prioridas del proceso */
+    NULL,        /* Manejo del proceso  */
+    0);          /* Procesador a poner la operacion */
   delay(100);
   iniciarReloc();
   conectarWifi();
-
 }
 
 void loop() {
@@ -77,7 +78,7 @@ void actualizarSerial() {
   }
 }
 
-void estadoSerial(Stream & miSerial) {
+void estadoSerial(Stream &miSerial) {
   char Letra = miSerial.read();
   switch (Letra) {
     case 'e':

@@ -3,6 +3,8 @@ WiFiClient netLocal;
 MQTTClient clientMQTT;
 MQTTClient clientMQTTLocal;
 
+boolean MqttConectado = false;
+
 
 void ConfigurarMQTT() {
   clientMQTT.begin(BrokerMQTT, net);
@@ -25,12 +27,20 @@ void mensajeMQTTLocal(String &topic, String &payload) {
     Serial.println("Cambiando sub");
     TelnetStream.println("Cambiando sub");
     SubReal = payload.toFloat();
-  }
-  else if (topic.endsWith("activo")) {
+  } else if (topic.endsWith("activo")) {
     pantallaActiva = !pantallaActiva;
     escrivirPantalla(pantallaActiva);
     Serial << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
     TelnetStream << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
+  } else if (topic.indexOf("control") > 0) {
+    payload.toLowerCase();
+    if (payload.equals("conectado")) {
+      ConectadoPC = true;
+    } else {
+      ConectadoPC = false;
+    }
+    Serial << "Cambiando PC: " << (ConectadoPC ? "Activo" : "Desactivo") << "\n";
+    TelnetStream << "Cambiando PC: " << (ConectadoPC ? "Activo" : "Desactivo") << "\n";
   }
 }
 
@@ -50,8 +60,14 @@ void actualizarMQTT() {
   } else if (estado == noMQTT) {
     estado = conectado;
     clientMQTT.subscribe(TopicMQTT);
-    Serial.println("MQTT - Conectada!");
-    TelnetStream.println("MQTT - Conectada!");
+  }
+
+  if (estado == conectado and !MqttConectado) {
+    // Serial.println("MQTT - Conectada!");
+    // TelnetStream.println("MQTT - Conectada!");
+    MqttConectado = true;
+  } else {
+    MqttConectado = false;
   }
 
   if (!clientMQTTLocal.connected()) {
@@ -63,7 +79,9 @@ void actualizarMQTT() {
     estadoLocal = noMQTT;
   } else if (estadoLocal == noMQTT) {
     estadoLocal = conectado;
-    clientMQTTLocal.subscribe(TopicMQTTLocal);
+    for (int i = 0; i < CantidadTopic; i++) {
+      clientMQTTLocal.subscribe(TopicMQTTLocal[i]);
+    }
     Serial.println("MQTT Local - Conectada!");
     TelnetStream.println("MQTT Local - Conectada!");
   }
