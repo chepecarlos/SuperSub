@@ -8,6 +8,10 @@ int mostarPantalla = temperatura;
 int numero = 0;
 int cambioPantalla = 4;
 
+int temperaturaAnterior = 0;
+int minutoAnterior = -1;
+estructuraEstado estadoDibujado = { true, true };
+
 void MultiCore(void* pvParameters) {
 
   Serial.println("Procesos en Procesador 0 Iniciados");
@@ -41,6 +45,7 @@ void MultiCore(void* pvParameters) {
 
 void funcionCambioPantalla() {
   mostarPantalla++;
+  estadoDibujado.actual = false;
   if (mostarPantalla > temperatura) {
     mostarPantalla = suscriptor;
   }
@@ -74,8 +79,12 @@ void dibujarTiempo() {
     int hora = horaActual();
     int minuto = minutoActual();
     boolean pm = esPM();
-    Serial << "Hora: " << hora << ":" << minuto << " " << (pm ? "PM" : "AM") << "\n";
-    mostarHora(hora, minuto, pm);
+    if (minuto != minutoAnterior || !estadoDibujado.actual) {
+      estadoDibujado.actual = true;
+      minutoAnterior = minuto;
+      mostarHora(hora, minuto, pm);
+      Serial << "Hora: " << hora << ":" << minuto << " " << (pm ? "PM" : "AM") << "\n";
+    }
   } else {
     Serial << "Error con la hora\n";
   }
@@ -83,9 +92,13 @@ void dibujarTiempo() {
 
 void dibujarTemperatura() {
   if (relocActivo()) {
-    float temperaturaInterna = temperaturaActual();
-    Serial << "Temeratura Actual: " << temperaturaInterna << "\n";
-    mostarTemperatura(temperaturaInterna);
+    int temperaturaInterna = abs(temperaturaActual());
+    if (temperaturaAnterior != temperaturaInterna || !estadoDibujado.actual) {
+      temperaturaAnterior = temperaturaInterna;
+      estadoDibujado.actual = true;
+      Serial << "Temeratura Actual: " << temperaturaInterna << "\n";
+      mostarTemperatura(temperaturaInterna);
+    }
   } else {
     Serial << "Error con la Tempetura\n";
   }
@@ -107,6 +120,5 @@ void iniciarSistema() {
   SubReal = leerSub().toInt();
   Serial << "Cargando Sub: " << SubReal << "\n";
   estadoPantalla.actual = leerPantalla();
-  // pantallaActiva = leerPantalla();
   Serial << "Cargando pantalla Activa: " << (estadoPantalla.actual ? "Activa" : "Desactiva") << "\n";
 }

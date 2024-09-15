@@ -42,8 +42,7 @@ void mostarHora(int hora, int minuto, boolean pm) {
   digitalWrite(segmentLatch, HIGH);
 }
 
-void mostarTemperatura(float valor) {
-  int numero = abs(valor);
+void mostarTemperatura(int numero) {
 
   enviarNumero('C', false);
   enviarNumero('o', false);
