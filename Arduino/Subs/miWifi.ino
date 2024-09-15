@@ -11,7 +11,10 @@ void conectarWifi() {
     Serial.println("Mi IP es: ");
     Serial.println(WiFi.localIP());
     estado = noMQTT;
+    estadoWifi.actual = true;
     estadoLocal = noMQTT;
+  } else {
+    estadoWifi.actual = false;
   }
 
   MDNS.begin(nombre);
@@ -29,13 +32,15 @@ void actualizarWifi() {
     delay(500);
     estado = noWifi;
     estadoLocal = noWifi;
+    estadoWifi.actual = false;
     return;
+  } else {
+    estadoWifi.actual = true;
   }
 
   ArduinoOTA.handle();
 
   actualizarMQTT();
-
 }
 
 void LeerTelnet() {

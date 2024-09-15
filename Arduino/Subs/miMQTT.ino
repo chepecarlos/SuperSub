@@ -28,19 +28,19 @@ void mensajeMQTTLocal(String &topic, String &payload) {
     TelnetStream.println("Cambiando sub");
     SubReal = payload.toFloat();
   } else if (topic.endsWith("activo")) {
-    pantallaActiva = !pantallaActiva;
-    escrivirPantalla(pantallaActiva);
-    Serial << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
-    TelnetStream << "Cambiando estado: " << (pantallaActiva ? "Activo" : "Desactivo") << "\n";
+    estadoPantalla.actual = !estadoPantalla.actual;
+    escrivirPantalla(estadoPantalla.actual);
+    Serial << "Cambiando estado: " << (estadoPantalla.actual ? "Activo" : "Desactivo") << "\n";
+    TelnetStream << "Cambiando estado: " << (estadoPantalla.actual ? "Activo" : "Desactivo") << "\n";
   } else if (topic.indexOf("control") > 0) {
     payload.toLowerCase();
     if (payload.equals("conectado")) {
-      ConectadoPC = true;
+      estadoPantalla.actual = true;
     } else {
-      ConectadoPC = false;
+      estadoPantalla.actual = false;
     }
-    Serial << "Cambiando PC: " << (ConectadoPC ? "Activo" : "Desactivo") << "\n";
-    TelnetStream << "Cambiando PC: " << (ConectadoPC ? "Activo" : "Desactivo") << "\n";
+    Serial << "Cambiando PC: " << (estadoPantalla.actual ? "Activo" : "Desactivo") << "\n";
+    TelnetStream << "Cambiando PC: " << (estadoPantalla.actual ? "Activo" : "Desactivo") << "\n";
   }
 }
 

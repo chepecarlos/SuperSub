@@ -11,9 +11,19 @@ template<class T> inline Print &operator<<(Print &obj, T arg) {
 #include <MQTT.h>
 #include <WiFiMulti.h>
 #include <TelnetStream.h>
+#include <Espalexa.h>
 #include "RTClib.h"
 
 #include "data.h"
+
+struct estructuraEstado {
+  bool actual;
+  bool anterior;
+};
+
+estructuraEstado estadoWifi = { false, false };
+estructuraEstado estadoAlexa = { false, false };
+estructuraEstado estadoPantalla = { true, true };
 
 WiFiMulti wifiMulti;
 
@@ -39,8 +49,6 @@ float SubRealAnterior = 0;
 boolean pantallaActiva = true;
 boolean pantallaActivaAnterior = false;
 
-boolean ConectadoPC = false;
-
 void setup() {
   Serial.begin(115200);
   Serial.println("iniciando sistema de SuperSub");
@@ -60,6 +68,16 @@ void setup() {
     0,           /* Prioridas del proceso */
     NULL,        /* Manejo del proceso  */
     0);          /* Procesador a poner la operacion */
+
+  xTaskCreatePinnedToCore(
+    procesoAlexa,   /* Nombre de la funcion */
+    "procesoAlexa", /* Nombre del proceso  */
+    10000,          /* Tamano de palabra */
+    NULL,           /* parametros de entrada */
+    9,              /* Prioridas del proceso */
+    NULL,           /* Manejo del proceso  */
+    1);
+
   delay(100);
   iniciarReloc();
   conectarWifi();

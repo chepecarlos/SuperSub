@@ -3,7 +3,7 @@
 #define tiempo 1
 #define temperatura 2
 
-int estadoPantalla = temperatura;
+int mostarPantalla = temperatura;
 
 int numero = 0;
 int cambioPantalla = 4;
@@ -15,8 +15,8 @@ void MultiCore(void* pvParameters) {
   iniciarSistema();
   configurarCambioPantalla();
   while (true) {
-    if (pantallaActiva || ConectadoPC) {
-      switch (estadoPantalla) {
+    if (estadoPantalla.actual) {
+      switch (mostarPantalla) {
         case suscriptor:
           dibujarSub();
           break;
@@ -40,9 +40,9 @@ void MultiCore(void* pvParameters) {
 }
 
 void funcionCambioPantalla() {
-  estadoPantalla++;
-  if (estadoPantalla > temperatura) {
-    estadoPantalla = suscriptor;
+  mostarPantalla++;
+  if (mostarPantalla > temperatura) {
+    mostarPantalla = suscriptor;
   }
 }
 
@@ -106,6 +106,7 @@ void iniciarSistema() {
   delay(500);
   SubReal = leerSub().toInt();
   Serial << "Cargando Sub: " << SubReal << "\n";
-  pantallaActiva = leerPantalla();
-  Serial << "Cargando pantalla Activa: " << (pantallaActiva ? "Activa" : "Desactiva") << "\n";
+  estadoPantalla.actual = leerPantalla();
+  // pantallaActiva = leerPantalla();
+  Serial << "Cargando pantalla Activa: " << (estadoPantalla.actual ? "Activa" : "Desactiva") << "\n";
 }
