@@ -48,7 +48,6 @@ void MultiCore(void* pvParameters) {
 
     } else {
       mostarNumeros(0);
-      pantallaActivaAnterior = pantallaActiva;
     }
     delay(500);
   }
@@ -67,22 +66,16 @@ void configurarCambioPantalla() {
 }
 
 void dibujarSub() {
-  if (SubReal >= 0) {
-    if (SubReal != SubRealAnterior) {
-      SubRealAnterior = SubReal;
-      mostarNumeros(SubReal);
-      Serial << "Actualizando pantalla " << SubReal << "\n";
-      TelnetStream << "Actualizando pantalla " << SubReal << "\n";
-      escrivirSub(SubReal);
-    } else  // if (pantallaActiva != pantallaActivaAnterior ) {
-    {
-      pantallaActivaAnterior = pantallaActiva;
-      // Serial << "Redibujar\n";
-      // TelnetStream << "Redibujar\n";
-      mostarNumeros(SubReal);
-    }
+  if (SubReal >= 0 && (!estadoDibujado.actual || SubReal != SubRealAnterior)) {
+    estadoDibujado.actual = true;
+    SubRealAnterior = SubReal;
+    mostarNumeros(SubReal);
+    Serial << "Actualizando pantalla " << SubReal << "\n";
+    TelnetStream << "Actualizando pantalla " << SubReal << "\n";
+    escrivirSub(SubReal);
   }
 }
+
 
 void dibujarTiempo() {
   if (relocActivo()) {

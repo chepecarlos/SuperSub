@@ -46,9 +46,6 @@ int estadoAnteriorLocal = -1;
 float SubReal = -1;
 float SubRealAnterior = 0;
 
-boolean pantallaActiva = true;
-boolean pantallaActivaAnterior = false;
-
 void setup() {
   Serial.begin(115200);
   Serial.println("iniciando sistema de SuperSub");
