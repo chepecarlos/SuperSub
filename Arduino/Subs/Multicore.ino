@@ -19,6 +19,17 @@ void MultiCore(void* pvParameters) {
   iniciarSistema();
   configurarCambioPantalla();
   while (true) {
+
+    if (estadoPantalla.actual != estadoPantalla.anterior) {
+      estadoPantalla.anterior = estadoPantalla.actual;
+      escrivirPantalla(estadoPantalla.actual);
+      if (estadoPantalla.anterior) {
+        Serial.println("Encendiendo pantalla");
+      } else {
+        Serial.println("Apagar pantalla");
+      }
+    }
+
     if (estadoPantalla.actual) {
       switch (mostarPantalla) {
         case suscriptor:
